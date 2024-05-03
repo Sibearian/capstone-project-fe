@@ -8,16 +8,46 @@
 	});
 </script>
 
+<style>
+	/* Style for table */
+	table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+	/* Style for table headers */
+	th {
+		background-color: #f2f2f2;
+		border: 1px solid #dddddd;
+		text-align: left;
+		padding: 8px;
+	}
+
+	/* Style for table cells */
+	td {
+		border: 1px solid #dddddd;
+		text-align: left;
+		padding: 8px;
+	}
+
+	/* Style for alternating row colors */
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+
+	/* Style for loading message */
+	.loading-message {
+		font-size: 18px;
+		font-weight: bold;
+		color: blue;
+	}
+</style>
+
 <table>
-	<tr>
-		<td>Sensor Name</td>
-		<td>do2 </td>
-		<td>turbidity </td>
-		<td>temperature </td>
-		<td>ph</td>
-	</tr>
 	{#await q}
-		<h3>Loading...</h3>
+		<tr>
+			<td colspan="6" class="loading-message">Loading...</td>
+		</tr>
 	{:then { rows }}
 		{#each rows as row}
 			<DataRow sensor={row} />

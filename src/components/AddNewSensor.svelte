@@ -10,6 +10,7 @@
 	let visible = writable(false);
 
 	async function createNewSensor() {
+		const id = uuid();
 		const res = await turso.execute({
 			sql: 'INSERT INTO sensor VALUES (?, ?)',
 			args: [uuid(), name]
