@@ -1,11 +1,33 @@
 <script>
 	import { turso } from '$lib/turso';
+	import { writable } from 'svelte/store';
+	let data = writable({});
 
-	const q = turso.execute({
-		sql: 'select * from alerts ORDER BY timestamp DESC Limit 10',
-		args: []
-	});
+	setInterval(
+		() =>
+			turso
+				.execute({
+					sql: 'select * from alerts ORDER BY timestamp DESC Limit 10',
+					args: []
+				})
+				.then((res) => data.set(res.rows)),
+		5000
+	);
 </script>
+
+<ul>
+	{#if $data?.length === undefined}
+		<li class="loading-message">Loading...</li>
+	{:else}
+		{#each $data as row}
+			<li>
+				{row[0]}
+				<br />
+				- {row[1]}
+			</li>
+		{/each}
+	{/if}
+</ul>
 
 <style>
 	/* Style for loading message */
@@ -28,19 +50,4 @@
 		background-color: #f2f2f2;
 		border: 1px solid #dddddd;
 	}
-
 </style>
-
-<ul>
-	{#await q}
-		<li class="loading-message">Loading...</li>
-	{:then { rows }}
-		{#each rows as row}
-			<li>
-				{row[0]}
-				<br />
-				- {row[1]}
-			</li>
-		{/each}
-	{/await}    
-</ul>

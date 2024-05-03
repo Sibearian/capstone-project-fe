@@ -49,8 +49,19 @@
 			<td colspan="6" class="loading-message">Loading...</td>
 		</tr>
 	{:then { rows }}
+	
+	<table>
+		<tr>
+			<th>Sensor Name</th>
+			<th>Timestamp</th>
+			<th>turbidity</th>
+			<th>temperature</th>
+			<th>ph</th>
+		</tr>
 		{#each rows as row}
-			<DataRow sensor={row} />
+			<DataRow sensor_id={row.sensor_id} sensor_name={row.sensor_name} />
 		{/each}
+		
+	</table>
 	{/await}
 </table>

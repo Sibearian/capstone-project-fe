@@ -1,16 +1,45 @@
 <script>
 	import { turso } from '$lib/turso';
 	import { page } from '$app/stores';
+	import { writable } from 'svelte/store';
 
-	const q = turso.execute({
-		sql: 'Select timestamp, turbidity FROM sensor_data WHERE id = ? ORDER BY timestamp DESC LIMIT 500',
-		args: [$page.params.sensor_id]
-	});
+	let rows = writable({});
+
+	setInterval(
+		() =>
+			turso
+				.execute({
+					sql: 'Select timestamp, turbidity FROM sensor_data WHERE id = ? ORDER BY timestamp DESC LIMIT 500',
+					args: [$page.params.sensor_id]
+				})
+				.then((res) => {
+					rows.set(res.rows);
+				}),
+		1000
+	);
 </script>
 
-{#await q}
-	Loading
-{:then { rows }}
+<table>
+	<thead>
+		<tr>
+			<th>Timestamp</th>
+			<th>Turbidity</th>
+		</tr>
+	</thead>
+	<tbody>
+		{#if $rows?.length === undefined}
+			Loading
+		{:else}
+			{#each $rows as row}
+				<tr>
+					<td class="table-cell">{new Date(row.timestamp * 1000).toLocaleString()}</td>
+					<td class="table-cell">{row.turbidity}</td>
+				</tr>
+			{/each}
+		{/if}
+	</tbody>
+</table>
+
 <style>
 	/* Style for the table */
 	table {
@@ -37,28 +66,4 @@
 	tr:nth-child(even) {
 		background-color: #f2f2f2;
 	}
-
-	/* Style for the pH column */
-	.ph-column {
-		color: blue; /* Adjust color as needed */
-		font-weight: bold;
-	}
 </style>
-
-	<table>
-		<thead>
-			<tr>
-				<th>Timestamp</th>
-				<th>Turbidity</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each rows as row}
-				<tr>
-					<td class="table-cell">{new Date(row[0] * 1000).toLocaleString()}</td>
-					<td class="table-cell">{row[1]}</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
-{/await}

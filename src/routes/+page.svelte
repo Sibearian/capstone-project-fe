@@ -20,7 +20,9 @@
 	.page {
 		display: flex;
 		flex-direction: row;
+		padding-right: 5%;
 		padding-left: 5%;
+		column-gap: 5%;
 	}
 	.data {
 		flex: 3;
