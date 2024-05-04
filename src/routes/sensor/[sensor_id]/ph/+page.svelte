@@ -68,8 +68,4 @@
 	}
 
 	/* Style for the pH column */
-	.ph-column {
-		color: blue; /* Adjust color as needed */
-		font-weight: bold;
-	}
 </style>

@@ -17,7 +17,7 @@
 					const { rows } = res;
 					data.set(rows[0]);
 				}),
-		1000
+		5000
 	);
 </script>
 

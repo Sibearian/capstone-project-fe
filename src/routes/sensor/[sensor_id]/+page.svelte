@@ -13,7 +13,6 @@
 					args: [$page.params.sensor_id]
 				})
 				.then((res) => {
-					console.log(res);
 					data.set(res.rows);
 				}),
 		1000
